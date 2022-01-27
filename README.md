@@ -9,8 +9,8 @@ Tech stack used:
 - SSMS- Microsoft SQL Server / SQL
 
 Patterns and principles used:
--SOLID principles
--OOP principles 
--Repository pattern
--KISS, YAGNI, DRY
+SOLID principles, 
+OOP principles,
+Repository pattern,
+KISS, YAGNI, DRY
 
