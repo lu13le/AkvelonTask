@@ -8,7 +8,11 @@ Tech stack used:
 - EntityFrameworkCore
 - SSMS- Microsoft SQL Server / SQL
 
-Patterns and principles used: SOLID principles, OOP principles, Repository pattern, KISS, YAGNI, DRY
+Patterns and principles used: 
+- SOLID principles
+- OOP principles
+- Repository pattern
+- KISS, YAGNI, DRY
 
 Testing: 
 - Postman
