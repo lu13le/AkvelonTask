@@ -157,6 +157,41 @@ namespace AkvelonTask.Controllers
 
         }
 
+        //returns list of tasks from a project
+        //api/projects/projectId/tasks
+        [HttpGet("SortedByTaskPriority", Name = "GetTasksFromProjectSortedByTaskPriority")]
+        //expected response type
+        [ProducesResponseType(200, Type = typeof(IEnumerable<ProjectTask>))]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult GetTasksFromProjectSortedByTaskPriority(int projectId)
+        {
+            if (!_projectRepository.ProjectExists(projectId))
+                return NotFound();
+
+            var tasks = _projectRepository.GetTasksFromProjectSortedByPriority(projectId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var taskDto = new List<ProjectTask>();
+
+            foreach (var task in tasks)
+            {
+                taskDto.Add(new ProjectTask
+                {
+                    Id = task.Id,
+                    TaskName = task.TaskName,
+                    TaskDescription = task.TaskDescription,
+                    TaskStatus = task.TaskStatus,
+                    TaskPriority = task.TaskPriority
+                });
+            }
+
+            return Ok(taskDto);
+
+        }
+
 
         //creating new project
         //api/projects

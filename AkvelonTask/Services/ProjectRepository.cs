@@ -46,6 +46,11 @@ namespace AkvelonTask.Services
             return _projectDataContext.Tasks.Where(t => t.Project.Id == projectId).ToList();
         }
 
+        public ICollection<ProjectTask> GetTasksFromProjectSortedByPriority(int projectId)
+        {
+            return _projectDataContext.Tasks.OrderByDescending(p => p.TaskPriority).Where(t=>t.Project.Id==projectId).ToList();
+        }
+
         public bool ProjectExists(int projectId)
         {
             return _projectDataContext.Projects.Any(p => p.Id == projectId);

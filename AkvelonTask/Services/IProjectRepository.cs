@@ -9,6 +9,7 @@ namespace AkvelonTask.Services
         ICollection<Project> GetProjects();
         Project GetProject(int projectId);
         ICollection<ProjectTask> GetTasksFromProject(int projectId);
+        ICollection<ProjectTask> GetTasksFromProjectSortedByPriority(int projectId);
         ICollection<Project> GetSortedProjectsByPriority();
         bool ProjectExists(int projectId);
 
