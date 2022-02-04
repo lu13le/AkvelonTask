@@ -1,6 +1,8 @@
 # AkvelonTask
 .Net Core CRUD Web API
 
+You can run project from Visual Studio IDE.
+
 I developed web api with CRUD functionalities.
 
 Tech stack used: 
