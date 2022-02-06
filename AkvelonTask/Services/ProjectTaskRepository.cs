@@ -8,6 +8,8 @@ namespace AkvelonTask.Services
     public class ProjectTaskRepository : IProjectTaskRepository
     {
         private readonly DataContext _projectTaskDataContext;
+
+        //Injecting needed data context to perform operations on Project Tasks
         public ProjectTaskRepository(DataContext projectTaskDataContext)
         {
             _projectTaskDataContext=projectTaskDataContext;

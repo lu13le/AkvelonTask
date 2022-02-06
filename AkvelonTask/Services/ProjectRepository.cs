@@ -9,6 +9,7 @@ namespace AkvelonTask.Services
     {
         private readonly DataContext _projectDataContext;
 
+        //Injecting needed data context in order to perform operations on Projects
         public ProjectRepository(DataContext projectDataContext)
         {
             _projectDataContext = projectDataContext;

@@ -30,8 +30,10 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Project>))]
         public  IActionResult GetProjects()
         {
+            //Getting list of all projects
             var projects = _projectRepository.GetProjects().ToList();
 
+            //Checking if model state is valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -63,8 +65,10 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Project>))]
         public IActionResult GetSortedProjectsByPriority()
         {
+            //Geting sorted list of projects
             var projects = _projectRepository.GetSortedProjectsByPriority().ToList();
 
+            //Checking if model state is valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -97,11 +101,15 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(200, Type = typeof(Project))]
         public IActionResult GetProject(int projectId)
         {
+            //Checking if project with projectId exists
             if (!_projectRepository.ProjectExists(projectId))
                 return NotFound();
 
+            //Getting project by id
             var project = _projectRepository.GetProject(projectId);
 
+
+            //Checking if model state is valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -131,11 +139,14 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetTasksFromProject(int projectId)
         {
+            //Checking if project with projectId exists
             if (!_projectRepository.ProjectExists(projectId))
                 return NotFound();
 
+            //Getting all tasks from a project
             var tasks = _projectRepository.GetTasksFromProject(projectId);
 
+            //Checking if model state is valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -157,7 +168,7 @@ namespace AkvelonTask.Controllers
 
         }
 
-        //returns list of tasks from a project
+        //returns list of tasks from a project sorted by task priority
         //api/projects/projectId/tasks
         [HttpGet("SortedByTaskPriority", Name = "GetTasksFromProjectSortedByTaskPriority")]
         //expected response type
@@ -166,11 +177,14 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetTasksFromProjectSortedByTaskPriority(int projectId)
         {
+            //Checking if project exists
             if (!_projectRepository.ProjectExists(projectId))
                 return NotFound();
 
+            //Getting list of tasks from a project sorted by priority
             var tasks = _projectRepository.GetTasksFromProjectSortedByPriority(projectId);
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -203,17 +217,20 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(500)]
         public IActionResult CreateProject([FromBody] Project projectToCreate)
         {
+            //Checking if model state is valid
             if (projectToCreate == null)
                 return BadRequest(ModelState);
 
             var project = _projectRepository.GetProjects().Where(p => p.ProjectName.Trim().ToUpper() == projectToCreate.ProjectName.Trim().ToUpper()).FirstOrDefault();
-
+            
+            //Checking if project with given name already exists.
             if (project != null)
             {
                 ModelState.AddModelError("", $"Project {projectToCreate.ProjectName} already exists.");
                 return StatusCode(422, ModelState);
             }
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -236,16 +253,18 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(500)]
         public IActionResult UpdateProject(int projectId, [FromBody] Project updatedProjectInfo)
         {
+            //Checking if model state is valid
             if (updatedProjectInfo == null)
                 return BadRequest(ModelState);
 
             if (projectId != updatedProjectInfo.Id)
                 return BadRequest(ModelState);
 
+            //Checking if project exists
             if (!_projectRepository.ProjectExists(projectId))
                 return NotFound();
 
-
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -269,12 +288,15 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(409)]
         public IActionResult DeleteProject(int projectId)
         {
+            //Checking if project exists
 
             if (!_projectRepository.ProjectExists(projectId))
                 return NotFound();
 
+            //Finding project with exact projectId
             var projectToDelete = _projectRepository.GetProject(projectId);
 
+            //Logic for preventing deletion if project has at least one task
             if (_projectRepository.GetTasksFromProject(projectId).Count() > 0)
             {
                 ModelState.AddModelError("", $"Project {projectToDelete.ProjectName} cannot be deleted " +
@@ -282,6 +304,7 @@ namespace AkvelonTask.Controllers
                 return StatusCode(409, ModelState);
             }
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

@@ -12,6 +12,8 @@ namespace AkvelonTask.Controllers
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IProjectTaskRepository _taskRepositrory;
+
+        //Injecting needed repos
         public TasksController(IProjectRepository projectRepository, IProjectTaskRepository projectTaskRepository)
         {
             _projectRepository = projectRepository;
@@ -26,8 +28,10 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<ProjectTask>))]
         public IActionResult GetTasks()
         {
+            //Getting list of all tasks
             var tasks = _taskRepositrory.GetTasks().ToList();
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -57,8 +61,10 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<ProjectTask>))]
         public IActionResult GetTasksSortedByName()
         {
+            //Getting list of all tasks sorted by name
             var tasks = _taskRepositrory.GetTasksSortedByName().ToList();
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -89,11 +95,14 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(200, Type = typeof(ProjectTask))]
         public IActionResult GetTask(int taskId)
         {
+            //Checking if task exists
             if (!_taskRepositrory.TaskExists(taskId))
                 return NotFound();
 
+            //Getting task by taskId
             var task = _taskRepositrory.GetTask(taskId);
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -135,6 +144,7 @@ namespace AkvelonTask.Controllers
                 return StatusCode(404, ModelState);
             }
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -166,16 +176,19 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(500)]
         public IActionResult UpdateProject(int taskId, [FromBody] ProjectTask updateTaskInfo)
         {
+            //Returning badRequest if model state is not valid
             if (updateTaskInfo == null)
                 return BadRequest(ModelState);
 
+            //Returning badRequest if model state is not valid
             if (taskId != updateTaskInfo.Id)
                 return BadRequest(ModelState);
 
+            //Checking if task exists
             if (!_taskRepositrory.TaskExists(taskId))
                 return NotFound();
 
-
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -199,17 +212,18 @@ namespace AkvelonTask.Controllers
         [ProducesResponseType(409)]
         public IActionResult DeleteTask(int taskId)
         {
-
+            //Checking if task exists
             if (!_taskRepositrory.TaskExists(taskId))
                 return NotFound();
 
             var taskToDelete = _taskRepositrory.GetTask(taskId);
 
-            
 
+            //Returning badRequest if model state is not valid
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            //Returning friendly error message 
             if (!_taskRepositrory.DeleteTask(taskToDelete))
             {
                 ModelState.AddModelError("", $"Something went wrong deleting {taskToDelete.TaskName}");

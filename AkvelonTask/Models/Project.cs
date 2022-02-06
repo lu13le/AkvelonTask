@@ -8,6 +8,7 @@ namespace AkvelonTask.Models
 {
     public class Project
     {
+        //Properties with data annotations
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
